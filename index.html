@@ -13,7 +13,7 @@
     >
 
     <link rel="stylesheet" href="style.css">
-    <link rel="icon" type="image/png" href="./imagenes/globo%20huracan.png">
+   <link rel="icon" type="image/png" href="./imagenes/globo%20huracan.png">
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
 </head>
@@ -279,13 +279,31 @@
             required
         >
 
-        <label for="campo-letra">Letra del canto</label>
-        <textarea
-            id="campo-letra"
-            rows="8"
-            placeholder="Escribí la letra acá..."
-            required
-        ></textarea>
+       
+<div id="contenedor-versiones-letra">
+    <label for="campo-letra">Versión 1</label>
+    <textarea
+        id="campo-letra"
+        data-version-letra
+        rows="8"
+        placeholder="Escribí la primera versión de la letra..."
+        required
+    ></textarea>
+</div>
+
+<button
+    type="button"
+    id="agregar-version"
+    class="boton boton-secundario"
+>
+    + Agregar otra versión
+</button>
+
+<p class="ayuda-imagen">
+    Podés cargar hasta 3 versiones de la letra. Si el canto tiene una sola,
+    dejá únicamente la Versión 1.
+</p>
+
 
         <h3>El tema original</h3>
 
@@ -433,6 +451,14 @@
             <span class="etiqueta">CANCIONERO QUEMERO</span>
 
             <h2 id="titulo-dialogo"></h2>
+            
+            <div
+                id="selector-versiones"
+                class="selector-versiones"
+                aria-label="Versiones de la letra"
+                hidden
+            ></div>
+
 
             <pre id="letra-dialogo" class="letra"></pre>
 
