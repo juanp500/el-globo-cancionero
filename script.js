@@ -66,6 +66,7 @@ const sinResultados = document.getElementById("sin-resultados");
 
 const dialogo = document.getElementById("dialogo-cancion");
 const tituloDialogo = document.getElementById("titulo-dialogo");
+const selectorVersiones = document.getElementById("selector-versiones");
 const letraDialogo = document.getElementById("letra-dialogo");
 const cerrarDialogo = document.getElementById("cerrar-dialogo");
 const copiarLetra = document.getElementById("copiar-letra");
@@ -87,6 +88,8 @@ const campoDescripcion = document.getElementById("campo-descripcion");
 const campoImagenArchivo = document.getElementById("campo-imagen-archivo");
 const campoImagenUrl = document.getElementById("campo-imagen-url");
 const campoLetra = document.getElementById("campo-letra");
+const contenedorVersionesLetra = document.getElementById("contenedor-versiones-letra");
+const botonAgregarVersion = document.getElementById("agregar-version");
 const campoOriginalTitulo = document.getElementById("campo-original-titulo");
 const campoArtista = document.getElementById("campo-artista");
 const campoYoutube = document.getElementById("campo-youtube");
@@ -94,6 +97,91 @@ const campoYoutube = document.getElementById("campo-youtube");
 const cancelarEdicion = document.getElementById("cancelar-edicion");
 const mensajeAdministracion = document.getElementById("mensaje-administracion");
 const listaAdministracion = document.getElementById("lista-administracion");
+
+function actualizarCamposVersiones() {
+    const campos = contenedorVersionesLetra.querySelectorAll(
+        "textarea[data-version-letra]"
+    );
+
+    campos.forEach((campo, indice) => {
+        const numero = indice + 1;
+        const etiqueta = campo.previousElementSibling;
+
+        if (etiqueta && etiqueta.tagName === "LABEL") {
+            etiqueta.textContent = `Versión ${numero}`;
+        }
+
+        campo.required = indice === 0;
+        campo.placeholder =
+            `Escribí la versión ${numero} de la letra...`;
+
+        let botonEliminar = campo.parentElement.querySelector(
+            ".eliminar-version"
+        );
+
+        if (numero === 1) {
+            if (botonEliminar) {
+                botonEliminar.remove();
+            }
+            return;
+        }
+
+        if (!botonEliminar) {
+            botonEliminar = document.createElement("button");
+            botonEliminar.type = "button";
+            botonEliminar.className =
+                "boton boton-secundario eliminar-version";
+            botonEliminar.textContent = "Quitar versión";
+
+            botonEliminar.addEventListener("click", () => {
+                campo.parentElement.remove();
+                actualizarCamposVersiones();
+            });
+
+            campo.parentElement.appendChild(botonEliminar);
+        }
+    });
+
+    botonAgregarVersion.disabled = campos.length >= 3;
+    botonAgregarVersion.hidden = campos.length >= 3;
+}
+
+botonAgregarVersion.addEventListener("click", () => {
+    const campos = contenedorVersionesLetra.querySelectorAll(
+        "textarea[data-version-letra]"
+    );
+
+    if (campos.length >= 3) {
+        return;
+    }
+
+    const numero = campos.length + 1;
+
+    const grupo = document.createElement("div");
+    grupo.className = "grupo-version-letra";
+
+    const etiqueta = document.createElement("label");
+    etiqueta.textContent = `Versión ${numero}`;
+
+    const nuevaLetra = document.createElement("textarea");
+    nuevaLetra.dataset.versionLetra = "";
+    nuevaLetra.rows = 8;
+    nuevaLetra.placeholder =
+        `Escribí la versión ${numero} de la letra...`;
+
+    etiqueta.htmlFor = `campo-letra-version-${numero}`;
+    nuevaLetra.id = etiqueta.htmlFor;
+
+    grupo.appendChild(etiqueta);
+    grupo.appendChild(nuevaLetra);
+    contenedorVersionesLetra.appendChild(grupo);
+
+    actualizarCamposVersiones();
+    nuevaLetra.focus();
+});
+
+actualizarCamposVersiones();
+
 
 /* CARGAR DATOS GUARDADOS */
 
@@ -141,7 +229,12 @@ async function cargarCancionesDesdeSupabase() {
             titulo: fila.titulo,
             categoria: fila.categoria,
             descripcion: fila.descripcion || "",
-            letra: fila.letra || "",
+            
+letra: fila.letra || "",
+versiones: Array.isArray(fila.versiones) && fila.versiones.length > 0
+    ? fila.versiones
+    : [fila.letra || ""],
+
             imagen: fila.imagen || "imagenes/principal.pgn",
             destacada: fila.destacada === true,
             original: {
@@ -476,6 +569,7 @@ function mostrarOriginal(cancion) {
 
 /* ABRIR UNA CANCIÓN */
 
+
 function abrirCancion(id) {
     const cancion = obtenerCancion(id);
 
@@ -484,7 +578,63 @@ function abrirCancion(id) {
     cancionAbiertaId = id;
 
     tituloDialogo.textContent = cancion.titulo;
-    letraDialogo.textContent = cancion.letra;
+
+    const versionesGuardadas =
+        Array.isArray(cancion.versiones) &&
+        cancion.versiones.length > 0
+            ? cancion.versiones
+            : [cancion.letra || ""];
+
+    const versiones = versionesGuardadas
+        .slice(0, 3)
+        .map(version =>
+            typeof version === "string"
+                ? version
+                : version?.letra || ""
+        );
+
+    selectorVersiones.replaceChildren();
+
+    // Mostrar los botones solamente si hay más de una versión.
+    selectorVersiones.hidden = versiones.length <= 1;
+
+    versiones.forEach((letra, indice) => {
+        const boton = document.createElement("button");
+
+        boton.type = "button";
+        boton.className = "boton boton-secundario selector-version";
+        boton.textContent = `Versión ${indice + 1}`;
+        boton.setAttribute("aria-pressed", indice === 0 ? "true" : "false");
+
+        if (indice === 0) {
+            boton.classList.add("version-activa");
+        }
+
+        boton.addEventListener("click", () => {
+            letraDialogo.textContent = letra;
+
+            selectorVersiones
+                .querySelectorAll(".selector-version")
+                .forEach(otroBoton => {
+                    const seleccionado = otroBoton === boton;
+
+                    otroBoton.classList.toggle(
+                        "version-activa",
+                        seleccionado
+                    );
+
+                    otroBoton.setAttribute(
+                        "aria-pressed",
+                        seleccionado ? "true" : "false"
+                    );
+                });
+        });
+
+        selectorVersiones.appendChild(boton);
+    });
+
+    // Al abrir la canción, mostrar la primera versión.
+    letraDialogo.textContent = versiones[0];
 
     actualizarBotonFavoritoDialogo();
     mostrarOriginal(cancion);
@@ -493,6 +643,7 @@ function abrirCancion(id) {
         dialogo.showModal();
     }
 }
+
 
 function actualizarBotonFavoritoDialogo() {
     const esFavorita = favoritas.includes(cancionAbiertaId);
@@ -578,14 +729,33 @@ function mostrarAdministracion() {
 
 /* PANEL: LIMPIAR FORMULARIO */
 
+
 function limpiarFormulario() {
     formulario.reset();
     campoId.value = "";
     mensajeAdministracion.textContent = "";
+
+    // Eliminar las versiones adicionales.
+    const grupos = contenedorVersionesLetra.querySelectorAll(
+        ".grupo-version-letra"
+    );
+
+    grupos.forEach(grupo => grupo.remove());
+
+    // Dejar el formulario con una sola versión vacía.
+    campoLetra.value = "";
+    actualizarCamposVersiones();
+
+    // Restaurar el botón de agregar versiones.
+    botonAgregarVersion.disabled = false;
+    botonAgregarVersion.hidden = false;
+
     campoTitulo.focus();
 }
 
+
 /* PANEL: EDITAR CANCIÓN */
+
 
 function editarCancion(id) {
     const cancion = obtenerCancion(id);
@@ -597,21 +767,52 @@ function editarCancion(id) {
     campoDestacada.checked = cancion.destacada === true;
     campoCategoria.value = cancion.categoria;
     campoDescripcion.value = cancion.descripcion;
-    campoLetra.value = cancion.letra;
+
+    // Recuperar las versiones guardadas.
+    const versiones = Array.isArray(cancion.versiones) &&
+        cancion.versiones.length > 0
+        ? cancion.versiones
+        : [cancion.letra || ""];
+
+    // Dejar solamente el primer campo antes de cargar las versiones.
+    const grupos = contenedorVersionesLetra.querySelectorAll(
+        ".grupo-version-letra"
+    );
+
+    grupos.forEach(grupo => grupo.remove());
+
+    campoLetra.value = versiones[0]?.letra || versiones[0] || "";
+
+    // Crear los campos adicionales que necesite la canción.
+    for (let i = 1; i < versiones.length && i < 3; i++) {
+        botonAgregarVersion.click();
+
+        const campos = contenedorVersionesLetra.querySelectorAll(
+            "textarea[data-version-letra]"
+        );
+
+        campos[i].value =
+            typeof versiones[i] === "string"
+                ? versiones[i]
+                : versiones[i]?.letra || "";
+    }
+
+    actualizarCamposVersiones();
+
     campoImagenArchivo.value = "";
 
-campoImagenUrl.value =
-    cancion.imagen &&
-    !cancion.imagen.startsWith("data:") &&
-    cancion.imagen !== "imagenes/principal.pgn"
-        ? cancion.imagen
-        : "";
+    campoImagenUrl.value =
+        cancion.imagen &&
+        !cancion.imagen.startsWith("data:") &&
+        cancion.imagen !== "imagenes/principal.pgn"
+            ? cancion.imagen
+            : "";
 
     campoOriginalTitulo.value = cancion.original?.titulo || "";
     campoArtista.value = cancion.original?.artista || "";
     campoYoutube.value = cancion.original?.youtubeId
-    ? `https://www.youtube.com/watch?v=${cancion.original.youtubeId}`
-    : "";
+        ? `https://www.youtube.com/watch?v=${cancion.original.youtubeId}`
+        : "";
 
     mensajeAdministracion.textContent =
         `Editando: ${cancion.titulo}`;
@@ -622,6 +823,7 @@ campoImagenUrl.value =
 
     campoTitulo.focus();
 }
+
 
 /* PANEL: ELIMINAR CANCIÓN */
 
@@ -826,7 +1028,17 @@ formulario.addEventListener("submit", async evento => {
 
     const titulo = campoTitulo.value.trim();
     const descripcion = campoDescripcion.value.trim();
-    const letra = campoLetra.value.trim();
+    
+const letra = campoLetra.value.trim();
+
+const versiones = Array.from(
+    contenedorVersionesLetra.querySelectorAll(
+        "textarea[data-version-letra]"
+    )
+)
+.map(campo => campo.value.trim())
+.filter(texto => texto !== "");
+
     const categoria = campoCategoria.value;
 
     const tituloTemaOriginal = campoOriginalTitulo.value.trim();
@@ -951,9 +1163,10 @@ const imagenAnterior = existente ? existente.imagen : "";
         id: existente ? existente.id : siguienteId(),
         titulo,
         categoria,
-        descripcion,
-        letra,
-        imagen,
+       descripcion,
+letra: versiones[0] || "",
+versiones,
+imagen,
         destacada: campoDestacada.checked,
         original: {
             titulo: tituloTemaOriginal,
@@ -968,8 +1181,9 @@ const imagenAnterior = existente ? existente.imagen : "";
         titulo: cancion.titulo,
         categoria: cancion.categoria,
         descripcion: cancion.descripcion,
-        letra: cancion.letra,
-        imagen: cancion.imagen,
+letra: cancion.letra,
+versiones: cancion.versiones,
+imagen: cancion.imagen,
         destacada: cancion.destacada,
         original_titulo: cancion.original.titulo,
         artista_original: cancion.original.artista,
@@ -1039,12 +1253,13 @@ if (cancionAbiertaId === cancion.id && dialogo.open) {
 }
 
 
-    formulario.reset();
-    campoId.value = "";
+    
+limpiarFormulario();
 
-    mensajeAdministracion.textContent = existente
-        ? "¡Canción actualizada correctamente!"
-        : "¡Canción agregada al catálogo!";
+mensajeAdministracion.textContent = existente
+    ? "¡Canción actualizada correctamente!"
+    : "¡Canción agregada al catálogo!";
+
 });
 
 /* EVENTOS DEL CATÁLOGO */
