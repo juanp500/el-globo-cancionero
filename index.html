@@ -1,0 +1,487 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>El Globo | Canciones de la Quema</title>
+
+    <meta
+        name="description"
+        content="Un archivo dedicado a las canciones de cancha del Club Atlético Huracán."
+    >
+
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/png" href="imagenes/globo huracan.png">
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+</head>
+
+<body>
+
+    <!-- BARRA DE NAVEGACIÓN -->
+<header class="barra-superior">
+    <a class="marca" href="#inicio">
+        <span class="marca-icono">
+    <img src="imagenes/images.jpg" alt="Globo de Huracán">
+</span>
+
+        <span class="marca-texto">
+            <strong>HURACÁN</strong>
+            <small>CANCIONES DE CANCHA</small>
+        </span>
+    </a>
+
+    <nav class="navegacion">
+        <button
+            class="menu-movil-boton"
+            id="menu-movil-boton"
+            type="button"
+            aria-label="Abrir menú"
+            aria-expanded="false"
+            aria-controls="menu-movil-enlaces"
+        >
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+
+        
+<div class="menu-movil-enlaces" id="menu-movil-enlaces">
+    
+<a href="#inicio"><span aria-hidden="true">⌂</span> Inicio</a>
+<a href="#canciones"><span aria-hidden="true">♫</span> Catálogo</a>
+<a href="#canciones" data-filtro="favoritas"><span aria-hidden="true">♥</span> Favoritos</a>
+
+</div>
+
+    </nav>
+
+    
+<a class="marca-frase" href="#inicio">
+    <strong>EL SEXTO</strong>
+    <strong>GRANDE</strong>
+</a>
+
+</header>
+
+
+    <main>
+
+        <!-- PORTADA PRINCIPAL -->
+        <section class="portada" id="inicio">
+            <div class="portada-contenido">
+                <span class="etiqueta">
+                    CLUB ATLÉTICO HURACÁN
+                </span>
+
+                
+<h1>Un sentimiento,
+    no traten de entenderlo.
+</h1>
+
+
+                <p>
+                    Las canciones, las letras y el origen musical de la tribuna del Globo
+                </p>
+
+                <a class="boton boton-rojo" href="#canciones">
+                    Explorar canciones →
+                </a>
+            </div>
+
+            <div class="portada-indicador">
+                PARQUE PATRICIOS · BUENOS AIRES
+            </div>
+        
+</section>
+
+<!-- CANCIONES DESTACADAS -->
+<section class="seccion-destacadas" id="destacadas">
+    <div class="encabezado-seccion">
+        <div>
+            <span class="etiqueta">EL SENTIMIENTO QUEMERO</span>
+            <h2>Para cantar siempre</h2>
+            <p>Algunos de los cantos que hacen latir la tribuna.</p>
+        </div>
+
+        <a class="enlace-destacadas" href="#canciones">
+            Ver todo el repertorio →
+        </a>
+    </div>
+
+    <div class="rejilla-destacadas" id="lista-destacadas">
+        <!-- Las canciones destacadas se cargarán con JavaScript -->
+    </div>
+</section>
+
+<!-- CATÁLOGO MUSICAL -->
+<section class="seccion-canciones" id="canciones">
+            <div class="encabezado-seccion">
+                <div>
+                    <span class="etiqueta">
+                        EL REPERTORIO QUEMERO
+                    </span>
+
+                    <h2>Las canciones</h2>
+
+                    <p>
+                        Encontrá ese canto que estás buscando.
+                    </p>
+                </div>
+
+                <span class="contador" id="contador">
+                    0 canciones
+                </span>
+            </div>
+
+            
+<div class="busqueda">
+    <input
+        type="search"
+        id="buscador"
+        placeholder="Buscar por título o por una frase..."
+        aria-label="Buscar canciones"
+    >
+
+    <select id="orden-canciones" aria-label="Ordenar canciones">
+        <option value="predeterminado">Orden original</option>
+        <option value="titulo">Título: A-Z</option>
+        <option value="titulo-desc">Título: Z-A</option>
+        <option value="recientes">Más recientes</option>
+    </select>
+</div>
+
+
+            <div class="filtros">
+                <button class="filtro activo" data-filtro="todas">
+                    Todas
+                </button>
+
+                <button class="filtro" data-filtro="clasica">
+                    Clásicas
+                </button>
+
+                <button class="filtro" data-filtro="popular">
+                    Populares
+                </button>
+
+                <button class="filtro" data-filtro="favoritas">
+                    ♥ Favoritas
+                </button>
+            </div>
+
+            <div class="rejilla-canciones" id="lista-canciones">
+                <!-- Las tarjetas se generarán con JavaScript -->
+            </div>
+
+            <p id="sin-resultados" hidden>
+                No encontramos canciones con esa búsqueda.
+            </p>
+        </section>
+
+        <!-- INFORMACIÓN DEL PROYECTO -->
+        
+<section class="sobre-la-web" id="sobre-la-web">
+    <span class="etiqueta">PARQUE PATRICIOS · BUENOS AIRES</span>
+
+    <h2>GRANDE SE NACE.</h2>
+
+    <p class="texto-sobre">
+        Huracán es mucho más que un club. Es una historia,
+        un barrio y una pasión que se transmite de generación
+        en generación.
+    </p>
+
+    <p class="texto-sobre">
+        Este espacio reúne canciones de cancha del Globo,
+        sus letras y los temas originales que inspiraron
+        algunas de ellas. Un archivo para conocer, recordar
+        y compartir la cultura de nuestra tribuna.
+    </p>
+
+    <div class="datos-sobre">
+        <div class="dato-sobre">
+            <strong>HURACÁN</strong>
+            <span>El club de nuestros amores</span>
+        </div>
+
+        <div class="dato-sobre">
+            <strong>LAS CANCIONES</strong>
+            <span>La voz de la tribuna</span>
+        </div>
+
+        <div class="dato-sobre">
+            <strong>LA HISTORIA</strong>
+            <span>Los temas y sus orígenes</span>
+        </div>
+    </div>
+</section>
+
+<!-- PANEL DE ADMINISTRACIÓN -->
+<section class="administracion" id="administracion" hidden>
+    <div class="encabezado-seccion">
+        <div>
+            <span class="etiqueta">GESTIÓN DEL CANCIONERO</span>
+            <h2>Administrar canciones</h2>
+            <p>Agregá y organizá el repertorio quemero.</p>
+        </div>
+    </div>
+
+    <form id="formulario-cancion" class="formulario-cancion">
+        <input type="hidden" id="cancion-id">
+
+        <label for="campo-titulo">Título de la canción</label>
+        <input
+            id="campo-titulo"
+            type="text"
+            placeholder="Ej.: nombre del canto"
+            required
+        >
+
+<label for="campo-imagen-archivo">Subir portada desde tu computadora</label>
+<input
+    id="campo-imagen-archivo"
+    type="file"
+    accept="image/*"
+>
+
+<label for="campo-imagen-url">O pegar el enlace de una imagen</label>
+<input
+    id="campo-imagen-url"
+    type="url"
+    placeholder="https://ejemplo.com/portada.jpg"
+>
+
+<p class="ayuda-imagen">
+    Si elegís ambas opciones, se utilizará la imagen subida desde tu computadora.
+</p>
+        <label for="campo-categoria">Categoría</label>
+        <select id="campo-categoria" required>
+            <option value="clasica">Clásica</option>
+            <option value="popular">Popular</option>
+        </select>
+
+<label class="opcion-destacada" for="campo-destacada">
+    <input
+        id="campo-destacada"
+        type="checkbox"
+    >
+    Destacar esta canción en la portada
+</label>
+
+        <label for="campo-descripcion">Descripción</label>
+        <input
+            id="campo-descripcion"
+            type="text"
+            placeholder="Una breve descripción"
+            required
+        >
+
+        <label for="campo-letra">Letra del canto</label>
+        <textarea
+            id="campo-letra"
+            rows="8"
+            placeholder="Escribí la letra acá..."
+            required
+        ></textarea>
+
+        <h3>El tema original</h3>
+
+        <label for="campo-original-titulo">Nombre del tema original</label>
+        <input
+            id="campo-original-titulo"
+            type="text"
+            placeholder="Nombre de la canción original"
+        >
+
+        <label for="campo-artista">Artista original</label>
+        <input
+            id="campo-artista"
+            type="text"
+            placeholder="Nombre del artista o grupo"
+        >
+
+        <label for="campo-youtube">Enlace de YouTube</label>
+        <input
+            id="campo-youtube"
+            type="url"
+            placeholder="https://www.youtube.com/watch?v=..."
+        >
+
+        <div class="acciones-formulario">
+            <button type="submit" class="boton boton-rojo">
+                Guardar canción
+            </button>
+
+            <button
+                type="button"
+                id="cancelar-edicion"
+                class="boton boton-secundario"
+            >
+                Limpiar formulario
+            </button>
+        </div>
+
+        <p id="mensaje-administracion" role="status"></p>
+    </form>
+
+    
+<div class="lista-administracion">
+    <h3>Canciones cargadas</h3>
+
+    <button
+        type="button"
+        id="boton-exportar-copia"
+        class="boton-exportar-copia"
+    >
+        ↓ Descargar copia de seguridad
+    </button>
+
+    <div id="lista-administracion"></div>
+    
+<button
+    type="button"
+    id="boton-importar-copia"
+    class="boton-exportar-copia"
+>
+    ↑ Importar copia de seguridad
+</button>
+
+<input
+    type="file"
+    id="archivo-copia-seguridad"
+    accept=".json,application/json"
+    hidden
+>
+
+</div>
+
+
+</section>
+
+<button
+    type="button"
+    id="acceso-administracion"
+    class="acceso-administracion"
+>
+    ⚙ Acceso de administración
+</button>
+
+<div id="login-administracion" hidden>
+    <form id="formulario-login">
+        <label for="correo-administracion">Correo de administrador</label>
+        <input
+            type="email"
+            id="correo-administracion"
+            autocomplete="username"
+            placeholder="Tu correo"
+            required
+        >
+
+        <label for="contrasena-login">Contraseña</label>
+        <input
+            type="password"
+            id="contrasena-login"
+            autocomplete="current-password"
+            placeholder="Tu contraseña"
+            required
+        >
+
+        <button type="submit">Iniciar sesión</button>
+
+        <p id="mensaje-login" role="status"></p>
+    </form>
+</div>
+
+</main>
+
+
+    <!-- PIE DE PÁGINA -->
+<footer class="pie">
+    <div class="pie-contenido">
+        <a class="pie-logo" href="#inicio">EL GLOBO<span>.</span></a>
+
+        <p class="pie-frase">
+            Hay canciones que explican lo que las palabras no pueden.
+        </p>
+
+        <span class="pie-club">CLUB ATLÉTICO HURACÁN · PARQUE PATRICIOS</span>
+
+        <div class="pie-linea"></div>
+
+        <small>
+            Proyecto independiente de hinchas.
+            Hecho por y para el pueblo quemero.
+        </small>
+    </div>
+</footer>
+
+    <!-- VENTANA PARA VER CADA CANCIÓN -->
+    <dialog id="dialogo-cancion" class="dialogo">
+        <div class="dialogo-contenido">
+            <button
+                id="cerrar-dialogo"
+                class="cerrar-dialogo"
+                type="button"
+                aria-label="Cerrar"
+            >
+                ×
+            </button>
+
+            <span class="etiqueta">CANCIONERO QUEMERO</span>
+
+            <h2 id="titulo-dialogo"></h2>
+
+            <pre id="letra-dialogo" class="letra"></pre>
+
+            <button
+                id="copiar-letra"
+                class="boton boton-rojo"
+                type="button"
+            >
+                Copiar letra
+            </button>
+
+            <button
+                id="favorito-dialogo"
+                class="boton boton-secundario"
+                type="button"
+            >
+                ♥ Favorita
+            </button>
+
+            <!-- Aquí incorporaremos el tema original y su video -->
+            
+<section class="tema-original" id="tema-original">
+    <h3>El tema original</h3>
+
+    <p id="titulo-original"></p>
+    <p id="artista-original"></p>
+
+    <a
+        id="enlace-original"
+        class="enlace-original"
+        href="#"
+        target="_blank"
+        rel="noopener noreferrer"
+        hidden
+    >
+        <img id="portada-original" alt="" loading="lazy">
+
+        <span class="texto-enlace-original">
+            <strong>Escuchar tema original</strong>
+            <span>Reproducir en YouTube ↗</span>
+        </span>
+    </a>
+
+    <div id="reproductor-original"></div>
+</section>
+        </div>
+    </dialog>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="script.js"></script>
+</body>
+</html>
