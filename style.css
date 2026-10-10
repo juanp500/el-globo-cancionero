@@ -3148,3 +3148,45 @@ textarea:focus-visible {
 #administracion[hidden] {
     display: none !important;
 }
+
+/* Selector de versiones de las letras */
+.selector-versiones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 18px 0;
+}
+
+.selector-versiones[hidden] {
+    display: none;
+}
+
+.selector-version {
+    border: 1px solid #444;
+    background: #1b1b1b;
+    color: #eee;
+    padding: 10px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.selector-version:hover {
+    border-color: #e32636;
+    transform: translateY(-2px);
+}
+
+.selector-version.version-activa {
+    background: #c8102e;
+    border-color: #c8102e;
+    color: #fff;
+    font-weight: 700;
+}
+
+.selector-version:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: 3px;
+}
